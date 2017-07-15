@@ -7,10 +7,13 @@ var {User} = require('./models/user');
 
 var app = express();
 
-//create todos
 
+//bind middleware
+//body parser takes the entire body portion of an incoming request stream and exposes it on req.body
+//reads and stores a form's input as a javascript object
 app.use(bodyParser.json());
 
+//create todos
 app.post('/todos', (req, res) => {
     var todo = new Todo({
         text: req.body.text
@@ -22,6 +25,14 @@ app.post('/todos', (req, res) => {
     }, (e) => {
         res.status(400).send(e);
     });
+});
+
+app.get('/todos', (req, res) => {
+    Todo.find().then((todos) => {
+        res.send({todos: todos});
+    }, (e) => {
+        res.send(400).send(e);
+    })
 });
 
 app.listen(3000, () => {
