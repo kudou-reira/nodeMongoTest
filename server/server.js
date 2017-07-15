@@ -96,7 +96,7 @@ app.patch('/todos/:id', (req, res) =>  {
     
     else {
         body.completed = false;
-        //null removes an object
+        //null removes an object...sort of
         body.completedAt = null;
     }
     
