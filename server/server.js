@@ -1,3 +1,5 @@
+require('./config');
+
 var express = require('express');
 var bodyParser = require('body-parser');
 
@@ -10,7 +12,7 @@ const {ObjectID} = require('mongodb');
 const _ = require('lodash');
 
 var app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 //bind middleware
 //body parser takes the entire body portion of an incoming request stream and exposes it on req.body
