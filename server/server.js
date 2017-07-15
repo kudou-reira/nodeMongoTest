@@ -77,6 +77,41 @@ app.delete('/todos/:id', (req, res) => {
     });
 });
 
+app.patch('/todos/:id', (req, res) =>  {
+    
+    var id = req.params.id;
+    //req.body is all of the things returned in one specific object called by id
+    //_.pick takes an object, then the second argument is an array of things you want
+    //then pulls off the array of properties and returns an object with the properties requested
+    var body = _.pick(req.body, ['text', 'completed']);
+    
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+    
+    //check if boolean
+    if(_.isBoolean(body.completed) && body.completed){
+        body.completedAt = new Date().getTime();
+    }
+    
+    else {
+        body.completed = false;
+        //null removes an object
+        body.completedAt = null;
+    }
+    
+    //returnOriginal: false
+    Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+        if(!todo){
+            return res.status(404).send();
+        }
+        
+        res.send({todo});
+    }).catch((e) => {
+        res.status(400).send();
+    });
+});
+
 app.listen(port, () => {
    console.log(`Started on port ${port}`); 
 });
