@@ -35,6 +35,8 @@ var UserSchema = new mongoose.Schema({
     }]
 });
 
+
+//automatically runs because it's called as built-in instance method
 UserSchema.methods.toJSON = function() {
     var user = this;
     //converts to object
@@ -57,6 +59,27 @@ UserSchema.methods.generateAuthToken = function() {
     return user.save().then(() => {
         //passed as value for next success from 'then'
         return token;
+    });
+};
+
+//adds on to model
+
+UserSchema.statics.findByToken = function(token) {
+    var User = this;
+    var decode;
+    
+    try {
+        decode = jwt.verify(token, 'h123');
+        console.log(decode);
+    } catch (e) {
+
+    }
+    
+    //nested needs '  '
+    return User.findOne({
+        '_id': decode._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
     });
 };
 
