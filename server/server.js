@@ -19,6 +19,8 @@ const port = process.env.PORT;
 //reads and stores a form's input as a javascript object
 app.use(bodyParser.json());
 
+
+
 //create todos
 app.post('/todos', (req, res) => {
     var todo = new Todo({
@@ -114,8 +116,24 @@ app.patch('/todos/:id', (req, res) =>  {
     });
 });
 
+app.post('/users', (req, res) => {
+    
+    var body = _.pick(req.body, ['email', 'password']);
+    var user = new User(body);
+    //when new user created, gets a docs with ID and stuff
+    user.save().then(() => {
+        //doc gives ID and stuff
+        return user.generateAuthToken();
+    }).then((token) => {
+        //'x-' makes custom header
+        res.header('x-auth', token).send(user);
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
 app.listen(port, () => {
-   console.log(`Started on port ${port}`); 
+    console.log(`Started on port ${port}`); 
 });
 
 module.exports = {
