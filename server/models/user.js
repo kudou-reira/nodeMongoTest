@@ -71,7 +71,6 @@ UserSchema.statics.findByToken = function(token) {
     
     try {
         decode = jwt.verify(token, 'h123');
-        console.log(decode);
     } catch (e) {
 
     }
@@ -96,8 +95,6 @@ UserSchema.pre('save', function(next){
                 next();
            });
         });
-        
-     
     }
     
     else{
