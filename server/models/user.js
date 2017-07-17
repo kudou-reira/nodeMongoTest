@@ -50,7 +50,7 @@ UserSchema.methods.toJSON = function() {
 UserSchema.methods.generateAuthToken = function() {
     var user = this;
     var access = 'auth';
-    var token = jwt.sign({_id: user._id.toHexString(), access: access}, 'h123').toString();
+    var token = jwt.sign({_id: user._id.toHexString(), access: access}, process.env.JWT_SECRET).toString();
     
     user.tokens.push({
         access: access,
@@ -70,7 +70,7 @@ UserSchema.statics.findByToken = function(token) {
     var decode;
     
     try {
-        decode = jwt.verify(token, 'h123');
+        decode = jwt.verify(token, process.env.JWT_SECRET);
     } catch (e) {
 
     }
