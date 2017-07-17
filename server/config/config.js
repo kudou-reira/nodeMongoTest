@@ -6,6 +6,8 @@ if(env === 'development' || env === 'test'){
 //    console.log(envConfig);
     //get all keys and then returns to array
     //set all process.env to whatever envConfig is
+    
+    //forEach() executes the provided callback once for each element present in the array in ascending order
     Object.keys(envConfig).forEach((key) => {
         process.env[key] = envConfig[key];
     });
