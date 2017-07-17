@@ -107,7 +107,19 @@ UserSchema.statics.findByCredentials = function(email, password) {
     });
 };
 
-//scheme middleware to encrypt password before saving
+UserSchema.methods.removeToken = function(token){
+    //pull lets you remove something from an array
+    var user = this;
+    return user.update({
+        $pull: {
+            tokens: {
+                token: token
+            }
+        }
+    });
+};
+
+//schema middleware to encrypt password before saving
 UserSchema.pre('save', function(next){
     var user = this;
     //want to encrypt if password was modified (i.e. saved, changed, etc)
@@ -125,6 +137,8 @@ UserSchema.pre('save', function(next){
         next();
     }
 });
+
+
 
 var User = mongoose.model('User', UserSchema);
 
